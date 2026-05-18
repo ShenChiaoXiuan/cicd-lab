@@ -39,4 +39,12 @@ jobs:
         run: npm run format:check
 
       - name: Run tests
-        run: npm run test -- --reporter=verbose
+        run: npx vitest run --reporter=verbose --reporter=junit --outputFile=test-results.xml
+
+      - name: Publish test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Test Results
+          path: test-results.xml
+          reporter: java-junit
