@@ -12,6 +12,10 @@ jobs:
   ci:
     # 指定這個 job 要在 GitHub 提供的 Ubuntu runner 上執行。
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
 
     # steps 是這個 job 會依序執行的步驟。
     steps:
