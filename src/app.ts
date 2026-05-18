@@ -1,5 +1,7 @@
 import Fastify, { FastifyServerOptions } from 'fastify';
 
+const x: number = "這是字串"  // 型別錯誤
+
 export function buildApp(options: FastifyServerOptions = {}) {
   const app = Fastify({
     logger: options.logger ?? true,
