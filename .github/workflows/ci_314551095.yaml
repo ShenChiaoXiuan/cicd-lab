@@ -1,37 +1,42 @@
+# 這個 workflow 的名稱，會顯示在 GitHub Actions 頁面上。
 name: CI
 
+# 設定 workflow 的觸發條件。
 on:
+  # 當有程式碼 push 到 GitHub repository 時，自動執行這個 CI workflow。
   push:
 
+# jobs 底下可以定義一個或多個 job；每個 job 是一組會被執行的工作。
 jobs:
+  # 這裡定義名為 ci 的 job，負責執行 typecheck、format check 和 test。
   ci:
+    # 指定這個 job 要在 GitHub 提供的 Ubuntu runner 上執行。
     runs-on: ubuntu-latest
 
+    # steps 是這個 job 會依序執行的步驟。
     steps:
+      # 下載 repository 的程式碼，後面的步驟才讀得到專案檔案。
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 安裝 Node.js，讓 CI 環境可以執行 npm 指令。
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          # 指定使用 Node.js 22 版本，避免本機和 CI 的 Node 版本不同造成結果不一致。
           node-version: '22'
 
+      # 根據 package-lock.json 乾淨安裝依賴，適合在 CI 環境使用。
       - name: Install dependencies
         run: npm ci
 
+      # 執行 TypeScript 型別檢查；如果型別錯誤，這個 step 會失敗。
       - name: TypeScript typecheck
         run: npm run typecheck
 
+      # 檢查程式碼格式是否符合 Prettier 規則；格式不符合時 CI 會失敗。
       - name: Prettier check
         run: npm run format:check
 
       - name: Run tests
-        run: npm run test -- --reporter=verbose --reporter=junit --outputFile=test-results.xml
-
-      - name: Publish test results
-        uses: dorny/test-reporter@v1
-        if: always()   # 即使測試失敗也要顯示結果
-        with:
-          name: Test Results
-          path: test-results.xml
-          reporter: java-junit
+        run: npm run test -- --reporter=verbose
