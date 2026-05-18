@@ -16,7 +16,6 @@ jobs:
       contents: read
       checks: write
 
-
     # steps 是這個 job 會依序執行的步驟。
     steps:
       # 下載 repository 的程式碼，後面的步驟才讀得到專案檔案。
